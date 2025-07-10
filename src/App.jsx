@@ -8,6 +8,9 @@ function App() {
   const [status, setStatus] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // ✅ Your live backend URL on Render
+  const baseUrl = "https://backend-pdf-link-extractor.onrender.com";
+
   const handleChange = (e) => {
     setFile(e.target.files[0]);
     setMergedUrl("");
@@ -26,13 +29,13 @@ function App() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post("http://localhost:8000/upload", formData);
+      const res = await axios.post(`${baseUrl}/upload`, formData);
       const data = res.data;
 
       setLinks(data.extractedLinks || []);
 
       if (data.status === "success") {
-        setMergedUrl("http://localhost:8000" + data.mergedPdfUrl);
+        setMergedUrl(`${baseUrl}${data.mergedPdfUrl}`);
         setStatus("✅ Merged PDF ready!");
       } else if (data.status === "download_failed") {
         setMergedUrl("");
